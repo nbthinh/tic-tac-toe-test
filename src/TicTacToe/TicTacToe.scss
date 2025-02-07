@@ -1,0 +1,36 @@
+.game-container {
+    .title-segment {
+        .game-title {
+            text-align: center;
+            font-weight: 600;
+        }
+    }
+
+    .status-segment {
+       .status-segment-style {
+        font-size: 18px;
+        font-weight: 600;
+       } 
+    }
+
+    .game-segment {
+        .table-container {
+            justify-content: center;
+            align-items: center;
+            .tic-tac-toe-row {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .each-cell {
+                    border: 1px solid black;
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
