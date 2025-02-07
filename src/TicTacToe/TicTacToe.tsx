@@ -18,6 +18,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
         };
     }
     render() {
+        let { ticTacToeState } = this.state;
         return (<>
             <div className="container game-container">
                 <div className="row mt-3 title-segment">
@@ -33,22 +34,23 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 <div className="row mt-3 game-segment">
                     <div className="col-12">
                         <div className="table-container">
-
-                            <div className="tic-tac-toe-row">
-                                <div className="each-cell">X</div>
-                                <div className="each-cell">O</div>
-                                <div className="each-cell">O</div>
-                            </div>
-                            <div className="tic-tac-toe-row">
-                                <div className="each-cell">X</div>
-                                <div className="each-cell">O</div>
-                                <div className="each-cell">O</div>
-                            </div>
-                            <div className="tic-tac-toe-row">
-                                <div className="each-cell">X</div>
-                                <div className="each-cell">O</div>
-                                <div className="each-cell">O</div>
-                            </div>
+                            { ticTacToeState && ticTacToeState.length > 0 &&
+                                ticTacToeState.map((eachRow, indexRow) => {
+                                    return (
+                                        <div className="tic-tac-toe-row" key={`row-${indexRow}`}>
+                                            { eachRow && eachRow.length > 0 && 
+                                                eachRow.map((eachColumn, indexColumn) => {
+                                                    return (
+                                                        <div className="each-cell" key={`column-${indexColumn}`}>
+                                                            { eachColumn === true ? "" : eachColumn }
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                 </div>
