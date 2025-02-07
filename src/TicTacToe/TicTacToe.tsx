@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "./TicTacToe.scss";
 import { GameProps, GameStates } from 'interfaces/game.interface';
 import { ResultState } from 'constant/constant';
-
+import _ from "lodash";
 class TicTacToe extends Component<GameProps, GameStates> {
     constructor(props: GameProps) {
     
@@ -16,6 +16,27 @@ class TicTacToe extends Component<GameProps, GameStates> {
             player: 1,
             result: 4
         };
+    }
+
+    assignCharToCell() {
+        if (this.state.player === 1) return "X";
+        return "O";
+    }
+
+    handlePlayerClickToCell(indexRow: number, indexColumn: number) {
+        let stateCopy = _.cloneDeep(this.state.ticTacToeState);
+        if (stateCopy[indexRow][indexColumn] === true) {
+            stateCopy[indexRow][indexColumn] = this.assignCharToCell();
+            this.setState({
+                ticTacToeState: stateCopy
+            })
+            if (this.state.player === 1) {
+                this.setState({ player: 2 });
+            }
+            else {
+                this.setState({ player: 1 });
+            }
+        }
     }
     render() {
         let { ticTacToeState } = this.state;
@@ -41,7 +62,13 @@ class TicTacToe extends Component<GameProps, GameStates> {
                                             { eachRow && eachRow.length > 0 && 
                                                 eachRow.map((eachColumn, indexColumn) => {
                                                     return (
-                                                        <div className="each-cell" key={`column-${indexColumn}`}>
+                                                        <div
+                                                            className="each-cell"
+                                                            key={`column-${indexColumn}`}
+                                                            onClick={(event: any) => {
+                                                                this.handlePlayerClickToCell(indexRow, indexColumn)
+                                                            }}
+                                                        >
                                                             { eachColumn === true ? "" : eachColumn }
                                                         </div>
                                                     )
