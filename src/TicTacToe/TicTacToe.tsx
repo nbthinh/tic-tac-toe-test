@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import "./TicTacToe.scss";
-import { GameProps, GameStates } from 'interfaces/game.interface';
+import { GameProps, GameStates, MatchStatus } from 'interfaces/game.interface';
 import { ResultState } from 'constant/constant';
 import _ from "lodash";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal)
+
 class TicTacToe extends Component<GameProps, GameStates> {
     constructor(props: GameProps) {
     
@@ -27,24 +32,88 @@ class TicTacToe extends Component<GameProps, GameStates> {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
         if (this.state.result === 4 && stateCopy[indexRow][indexColumn] === true) {
             stateCopy[indexRow][indexColumn] = this.assignCharToCell();
-            this.setState({
-                ticTacToeState: stateCopy
-            })
+            let nextPlayer: 1 | 2;
+            let prevPlayer: 1 | 2;
             if (this.state.player === 1) {
-                this.setState({ player: 2 });
+                nextPlayer = 2;
+                prevPlayer = 1;
             }
             else {
-                this.setState({ player: 1 });
+                nextPlayer = 1;
+                prevPlayer = 2;
             }
-            this.checkIfTheMatchIsFinish();
+            this.setState({
+                ticTacToeState: stateCopy,
+                player: nextPlayer
+            }, () => {
+                let matchStatus = this.checkIfTheMatchIsFinish(prevPlayer);
+                if (matchStatus.isFinish) {
+                    MySwal.fire({
+                        title: "Finish",
+                        text: "The match is finished",
+                        icon: "question"
+                    });
+                }
+            })
+            
         }
     }
 
-    checkIfTheMatchIsFinish() {
+    checkIfPlayerIsWonInLine(
+        currentLine: [true | "X" | "O", true | "X" | "O", true | "X" | "O"],
+        prevPlayer: 1 | 2
+    ) {
+        let matchStatus: MatchStatus = {
+            isFinish: true,
+            winner: prevPlayer
+        };
+        for (let indexColumn = 0; indexColumn < currentLine.length - 1; indexColumn++) {
+            if (
+                currentLine[indexColumn] != currentLine[indexColumn + 1] ||
+                currentLine[indexColumn] === true || currentLine[indexColumn + 1] === true
+            ) {
+                matchStatus = {
+                    isFinish: false
+                }
+                break;
+            }
+        }
+        return matchStatus;
+        // if (matchStatus.isFinish) return matchStatus;
+    }
+
+    checkIfTheMatchIsFinish(prevPlayer: 1 | 2) {
+        let matchStatus: MatchStatus = {
+            isFinish: false
+        };
+        
         // Win arcording to row
         for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
             let currentRow = this.state.ticTacToeState[indexRow];
+            matchStatus = this.checkIfPlayerIsWonInLine(currentRow, prevPlayer)
+            if (matchStatus.isFinish) return matchStatus;
         }
+
+        // Win arcording to column
+        for (let indexColumn = 0; indexColumn < this.state.ticTacToeState[0].length; indexColumn++) {
+            let currentColumn:[true | "X" | "O", true | "X" | "O", true | "X" | "O"] = [true, true, true];
+            for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
+                currentColumn[indexRow] = this.state.ticTacToeState[indexRow][indexColumn];
+            }
+            matchStatus = this.checkIfPlayerIsWonInLine(currentColumn, prevPlayer);
+            if (matchStatus.isFinish) return matchStatus;
+        }
+
+        // Win arcording to left diagonal
+        let leftDiagonalLine: [true | "X" | "O", true | "X" | "O", true | "X" | "O"] = [true, true, true];
+        for (let index = 0; index < this.state.ticTacToeState.length; index++) {
+            leftDiagonalLine[index] = this.state.ticTacToeState[index][index];
+        }
+        matchStatus = this.checkIfPlayerIsWonInLine(leftDiagonalLine, prevPlayer);
+        if (matchStatus.isFinish) return matchStatus;
+
+        return matchStatus;
+
     }
 
     render() {

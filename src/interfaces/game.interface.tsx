@@ -11,3 +11,8 @@ export interface GameStates {
 export interface GameProps {
 
 }
+
+export interface MatchStatus {
+    isFinish: boolean,
+    winner?: 1 | 2
+}
