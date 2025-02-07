@@ -13,8 +13,8 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 [true, true, true],
                 [true, true, true]
             ],
-            player: 1,
-            result: 4
+            player: 1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
+            result: 4 // result = 1: Have not finished yet, result = 1: Player 1 win, result = 2: Player 2 win, result = 3: Player 3 win 
         };
     }
 
@@ -25,7 +25,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
 
     handlePlayerClickToCell(indexRow: number, indexColumn: number) {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
-        if (stateCopy[indexRow][indexColumn] === true) {
+        if (this.state.result === 4 && stateCopy[indexRow][indexColumn] === true) {
             stateCopy[indexRow][indexColumn] = this.assignCharToCell();
             this.setState({
                 ticTacToeState: stateCopy
@@ -36,8 +36,17 @@ class TicTacToe extends Component<GameProps, GameStates> {
             else {
                 this.setState({ player: 1 });
             }
+            this.checkIfTheMatchIsFinish();
         }
     }
+
+    checkIfTheMatchIsFinish() {
+        // Win arcording to row
+        for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
+            let currentRow = this.state.ticTacToeState[indexRow];
+        }
+    }
+
     render() {
         let { ticTacToeState } = this.state;
         return (<>
