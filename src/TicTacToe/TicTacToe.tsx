@@ -87,14 +87,14 @@ class TicTacToe extends Component<GameProps, GameStates> {
             isFinish: false
         };
         
-        // Win arcording to row
+        // Check Win arcording to row
         for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
             let currentRow = this.state.ticTacToeState[indexRow];
             matchStatus = this.checkIfPlayerIsWonInLine(currentRow, prevPlayer)
             if (matchStatus.isFinish) return matchStatus;
         }
 
-        // Win arcording to column
+        // Check Win arcording to column
         for (let indexColumn = 0; indexColumn < this.state.ticTacToeState[0].length; indexColumn++) {
             let currentColumn:[true | "X" | "O", true | "X" | "O", true | "X" | "O"] = [true, true, true];
             for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
@@ -104,14 +104,24 @@ class TicTacToe extends Component<GameProps, GameStates> {
             if (matchStatus.isFinish) return matchStatus;
         }
 
-        // Win arcording to left diagonal
-        let leftDiagonalLine: [true | "X" | "O", true | "X" | "O", true | "X" | "O"] = [true, true, true];
+        // Check Win arcording to left diagonal
+        let diagonalLine: [true | "X" | "O", true | "X" | "O", true | "X" | "O"] = [true, true, true];
         for (let index = 0; index < this.state.ticTacToeState.length; index++) {
-            leftDiagonalLine[index] = this.state.ticTacToeState[index][index];
+            diagonalLine[index] = this.state.ticTacToeState[index][index];
         }
-        matchStatus = this.checkIfPlayerIsWonInLine(leftDiagonalLine, prevPlayer);
+        matchStatus = this.checkIfPlayerIsWonInLine(diagonalLine, prevPlayer);
         if (matchStatus.isFinish) return matchStatus;
 
+        // Check Win arcording to right diagonal
+        diagonalLine = [true, true, true];
+        let i = 0, j = this.state.ticTacToeState[0].length - 1;
+        while (i < diagonalLine.length && j >= 0) {
+            diagonalLine[i] = this.state.ticTacToeState[i][j];
+            i = i + 1;
+            j = j - 1;
+        }
+
+        matchStatus = this.checkIfPlayerIsWonInLine(diagonalLine, prevPlayer);
         return matchStatus;
 
     }
