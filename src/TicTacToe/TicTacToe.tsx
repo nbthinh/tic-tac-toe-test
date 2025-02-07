@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import "./TicTacToe.scss";
 import { GameProps, GameStates, MatchStatus } from 'interfaces/game.interface';
-import { ResultState } from 'constant/constant';
 import _ from "lodash";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -19,7 +18,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 [true, true, true]
             ],
             player: 1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
-            result: 4 // result = 1: Have not finished yet, result = 1: Player 1 win, result = 2: Player 2 win, result = 3: Player 3 win 
+            // result: 4 // result = 1: Have not finished yet, result = 1: Player 1 win, result = 2: Player 2 win, result = 3: Player 3 win 
         };
     }
 
@@ -30,7 +29,9 @@ class TicTacToe extends Component<GameProps, GameStates> {
 
     handlePlayerClickToCell(indexRow: number, indexColumn: number) {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
-        if (this.state.result === 4 && stateCopy[indexRow][indexColumn] === true) {
+        if (
+            // this.state.result === 4 &&
+            stateCopy[indexRow][indexColumn] === true) {
             stateCopy[indexRow][indexColumn] = this.assignCharToCell();
             let nextPlayer: 1 | 2;
             let prevPlayer: 1 | 2;
@@ -48,15 +49,46 @@ class TicTacToe extends Component<GameProps, GameStates> {
             }, () => {
                 let matchStatus = this.checkIfTheMatchIsFinish(prevPlayer);
                 if (matchStatus.isFinish) {
-                    MySwal.fire({
-                        title: "Finish",
-                        text: "The match is finished",
-                        icon: "question"
-                    });
+                    if (!!matchStatus.winner) {
+                        MySwal.fire({
+                            title: `Player ${matchStatus.winner} won!!!`,
+                            icon: "success",
+                            draggable: true
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!!!",
+                            text: "Something went wrong!"
+                        });
+                    }
+                }
+                else {
+                    let isDraw = this.checkIfTheGameIsDraw();
+                    if (isDraw) {
+                        MySwal.fire({
+                            title: `The game is draw!!!`,
+                            icon: "success",
+                            draggable: true
+                        });
+                    }
                 }
             })
             
         }
+    }
+
+    checkIfTheGameIsDraw() {
+        let isDraw = true;
+        for (let indexRow = 0; indexRow < this.state.ticTacToeState.length; indexRow++) {
+            for (let indexColumn = 0 ; indexColumn <this.state.ticTacToeState[indexRow].length; indexColumn++) {
+                if (this.state.ticTacToeState[indexRow][indexColumn] === true) {
+                    return false;
+                }
+            }
+        }
+        return isDraw;
     }
 
     checkIfPlayerIsWonInLine(
@@ -137,7 +169,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 </div>
                 <div className="row mt-3 status-segment">
                     <div className="col-12 text-center status-segment-style">Player: { this.state.player }</div>
-                    <div className="col-12 text-center status-segment-style">Result: { ResultState[this.state.result] }</div>
+                    {/* <div className="col-12 text-center status-segment-style">Result: { ResultState[this.state.result] }</div> */}
                 </div>
 
                 <div className="row mt-3 game-segment">
