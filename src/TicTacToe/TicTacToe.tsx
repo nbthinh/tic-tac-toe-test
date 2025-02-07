@@ -4,6 +4,7 @@ import { GameProps, GameStates, MatchStatus } from 'interfaces/game.interface';
 import _ from "lodash";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { PlayerChar, PlayerNumber } from 'constant/constant';
 
 const MySwal = withReactContent(Swal)
 
@@ -18,14 +19,24 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 [true, true, true]
             ],
             player: 1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
+            playerScore: {
+                player1: 0,
+                player2: 0
+            }
             // result: 4 // result = 1: Have not finished yet, result = 1: Player 1 win, result = 2: Player 2 win, result = 3: Player 3 win 
         };
     }
 
     assignCharToCell() {
-        if (this.state.player === 1) return "X";
+        if (this.state.player === PlayerNumber.PLAYER1) return "X";
         return "O";
     }
+
+
+    // getPlayerChar(playerNumber: 1 | 2) {
+    //     if (playerNumber == 1) return "X";
+    //     return "O"
+    // }
 
     handlePlayerClickToCell(indexRow: number, indexColumn: number) {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
@@ -51,10 +62,11 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 if (matchStatus.isFinish) {
                     if (!!matchStatus.winner) {
                         MySwal.fire({
-                            title: `Player ${matchStatus.winner} won!!!`,
+                            title: `Winner is ${PlayerChar[matchStatus.winner]} won!!!`,
                             icon: "success",
                             draggable: true
                         });
+
                     }
                     else {
                         Swal.fire({
