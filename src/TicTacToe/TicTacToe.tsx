@@ -5,6 +5,7 @@ import _ from "lodash";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { PlayerChar, PlayerNumber } from 'constant/constant';
+import ScoreHistory from 'ScoreHistory/ScoreHistory';
 
 const MySwal = withReactContent(Swal)
 
@@ -303,11 +304,10 @@ class TicTacToe extends Component<GameProps, GameStates> {
                     </div>
                 </div>
                 <hr />
-                <div className="row mt-3 mb-3 score-history-title-segment">
-                    <div className="col-12">
-                        <h2 className="game-title">Score History</h2>
-                    </div>
-                </div>
+                
+                <ScoreHistory
+                    scoreHistoryList={this.state.scoreHistory}
+                />
             </div>
 
         </>);

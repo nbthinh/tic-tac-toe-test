@@ -1,4 +1,3 @@
-import { PlayerNumber } from "constant/constant";
 export interface GameStates {
     ticTacToeState: [
         [true | "X" | "O", true | "X" | "O", true | "X" | "O"],
@@ -20,4 +19,11 @@ export interface GameProps {
 export interface MatchStatus {
     isFinish: boolean,
     winner?: 1 | 2
+}
+
+export interface ScoreHistoryProps {
+    scoreHistoryList: {
+        player1: number,
+        player2: number
+    }[]
 }
