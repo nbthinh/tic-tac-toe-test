@@ -18,7 +18,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 [true, true, true],
                 [true, true, true]
             ],
-            player: 1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
+            player: PlayerNumber.PLAYER1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
             playerScore: {
                 player1: 0,
                 player2: 0

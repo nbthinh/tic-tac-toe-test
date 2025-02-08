@@ -1,10 +1,11 @@
+import { PlayerNumber } from "constant/constant";
 export interface GameStates {
     ticTacToeState: [
         [true | "X" | "O", true | "X" | "O", true | "X" | "O"],
         [true | "X" | "O", true | "X" | "O", true | "X" | "O"],
         [true | "X" | "O", true | "X" | "O", true | "X" | "O"]
     ];
-    player: 1 | 2;
+    player: number;
     playerScore: {
         player1: number,
         player2: number
