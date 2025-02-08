@@ -6,10 +6,10 @@ export interface GameStates {
         [true | "X" | "O", true | "X" | "O", true | "X" | "O"]
     ];
     player: number;
-    playerScore: {
+    scoreHistory: {
         player1: number,
         player2: number
-    }
+    }[]
     // result: 1 | 2 | 3 | 4;
 }
 

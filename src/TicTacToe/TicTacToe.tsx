@@ -19,12 +19,21 @@ class TicTacToe extends Component<GameProps, GameStates> {
                 [true, true, true]
             ],
             player: PlayerNumber.PLAYER1, // player = 1: Player 1's turn ; player = 2: Player 2's turn
-            playerScore: {
-                player1: 0,
-                player2: 0
-            }
+            scoreHistory: []
             // result: 4 // result = 1: Have not finished yet, result = 1: Player 1 win, result = 2: Player 2 win, result = 3: Player 3 win 
         };
+    }
+
+    handleRestartGame() {
+        this.setState({
+            ticTacToeState: [
+                [true, true, true],
+                [true, true, true],
+                [true, true, true]
+            ],
+            player: PlayerNumber.PLAYER1,
+            scoreHistory: []
+        })
     }
 
     assignCharToCell() {
@@ -37,6 +46,61 @@ class TicTacToe extends Component<GameProps, GameStates> {
     //     if (playerNumber == 1) return "X";
     //     return "O"
     // }
+
+    generateScoreHistory(winner?: number) {
+        let scoreHistory = _.cloneDeep(this.state.scoreHistory);
+        let newScore;
+        if (!!winner) {
+            if (scoreHistory.length === 0) {
+                if (winner === PlayerNumber.PLAYER1) {
+                    newScore = {
+                        player1: 1,
+                        player2: 0
+                    }
+                }
+                else {
+                    newScore = {
+                        player1: 0,
+                        player2: 1
+                    }
+                }
+            }
+            else {
+                let lastScore = scoreHistory[scoreHistory.length - 1];
+                if (winner == PlayerNumber.PLAYER1) {
+                    newScore = {
+                        player1: lastScore.player1 + 1,
+                        player2: lastScore.player2
+                    };
+                }
+                else {
+                    newScore = {
+                        player1: lastScore.player1,
+                        player2: lastScore.player2 + 1
+                    };
+                }
+            }
+            
+        }
+        else {
+            // Draw Situation
+            console.log("draw situation");
+            if (scoreHistory.length === 0) {
+                newScore = {
+                    player1: 0,
+                    player2: 0
+                }
+            }
+            else {
+                let lastScore = scoreHistory[scoreHistory.length - 1];
+                newScore = {...lastScore};
+            }
+        }
+        scoreHistory.push(newScore)
+        this.setState({
+            scoreHistory: scoreHistory
+        })
+    }
 
     handlePlayerClickToCell(indexRow: number, indexColumn: number) {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
@@ -66,7 +130,15 @@ class TicTacToe extends Component<GameProps, GameStates> {
                             icon: "success",
                             draggable: true
                         });
-
+                        this.generateScoreHistory(matchStatus.winner);
+                        this.setState({
+                            ticTacToeState: [
+                                [true, true, true],
+                                [true, true, true],
+                                [true, true, true]
+                            ],
+                            player: PlayerNumber.PLAYER1
+                        })
                     }
                     else {
                         Swal.fire({
@@ -84,6 +156,15 @@ class TicTacToe extends Component<GameProps, GameStates> {
                             icon: "success",
                             draggable: true
                         });
+                        this.generateScoreHistory();
+                        this.setState({
+                            ticTacToeState: [
+                                [true, true, true],
+                                [true, true, true],
+                                [true, true, true]
+                            ],
+                            player: PlayerNumber.PLAYER1
+                        })
                     }
                 }
             })
@@ -176,7 +257,15 @@ class TicTacToe extends Component<GameProps, GameStates> {
             <div className="container game-container">
                 <div className="row mt-3 title-segment">
                     <div className="col-12">
-                        <h3 className="game-title">Tic Tac Toe Game</h3>
+                        <h2 className="game-title">Tic Tac Toe Game</h2>
+                    </div>
+                </div>
+                <div className="row restart-button-segment">
+                    <div className="col-12 right-position">
+                        <button
+                            className="btn btn-outline-primary"
+                            onClick={ () => this.handleRestartGame() }
+                        >Restart game</button>
                     </div>
                 </div>
                 <div className="row mt-3 status-segment">
@@ -184,7 +273,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                     {/* <div className="col-12 text-center status-segment-style">Result: { ResultState[this.state.result] }</div> */}
                 </div>
 
-                <div className="row mt-3 game-segment">
+                <div className="row mt-3 mb-3 game-segment">
                     <div className="col-12">
                         <div className="table-container">
                             { ticTacToeState && ticTacToeState.length > 0 &&
@@ -211,6 +300,12 @@ class TicTacToe extends Component<GameProps, GameStates> {
                                 })
                             }
                         </div>
+                    </div>
+                </div>
+                <hr />
+                <div className="row mt-3 mb-3 score-history-title-segment">
+                    <div className="col-12">
+                        <h2 className="game-title">Score History</h2>
                     </div>
                 </div>
             </div>

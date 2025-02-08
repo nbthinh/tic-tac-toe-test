@@ -3,6 +3,14 @@
         .game-title {
             text-align: center;
             font-weight: 600;
+            text-transform: uppercase;
+        }
+    }
+
+    .restart-button-segment {
+        .right-position {
+            display: flex;
+            justify-content: flex-end;
         }
     }
 
@@ -31,6 +39,14 @@
                     cursor: pointer;
                 }
             }
+        }
+    }
+
+    .score-history-title-segment {
+        .game-title {
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     }
 }
