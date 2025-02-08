@@ -103,6 +103,17 @@ class TicTacToe extends Component<GameProps, GameStates> {
         })
     }
 
+    startNewGame() {
+        this.setState({
+            ticTacToeState: [
+                [true, true, true],
+                [true, true, true],
+                [true, true, true]
+            ],
+            player: PlayerNumber.PLAYER1
+        })
+    }
+
     handlePlayerClickToCell(indexRow: number, indexColumn: number) {
         let stateCopy = _.cloneDeep(this.state.ticTacToeState);
         if (
@@ -132,14 +143,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                             draggable: true
                         });
                         this.generateScoreHistory(matchStatus.winner);
-                        this.setState({
-                            ticTacToeState: [
-                                [true, true, true],
-                                [true, true, true],
-                                [true, true, true]
-                            ],
-                            player: PlayerNumber.PLAYER1
-                        })
+                        this.startNewGame();
                     }
                     else {
                         Swal.fire({
@@ -158,14 +162,7 @@ class TicTacToe extends Component<GameProps, GameStates> {
                             draggable: true
                         });
                         this.generateScoreHistory();
-                        this.setState({
-                            ticTacToeState: [
-                                [true, true, true],
-                                [true, true, true],
-                                [true, true, true]
-                            ],
-                            player: PlayerNumber.PLAYER1
-                        })
+                        this.startNewGame();
                     }
                 }
             })
